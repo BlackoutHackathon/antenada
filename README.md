@@ -13,7 +13,7 @@
 - **Frontend**: React.js
 - **Backend**: Node.js + Express
 - **Reconhecimento de voz**: Annyang.js
-- **Geolocalização**: Google Maps API
+- **Geolocalização**: OpenStreetMap
 
 ## Instalação
 
