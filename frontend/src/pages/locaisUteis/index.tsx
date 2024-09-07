@@ -8,8 +8,8 @@ const Teste = () => {
     <Main
       meta={
         <Meta
-          title="mi-calendar"
-          description="Mi-Calendar front-end challange"
+          title="antenada"
+          description="Antenada front-end challange"
         />
       }
     >

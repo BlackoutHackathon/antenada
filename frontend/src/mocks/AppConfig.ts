@@ -1,6 +1,6 @@
 export const AppConfig = {
-  site_name: 'mi-calendar',
+  site_name: 'antenada',
   title: 'Calendar',
-  description: 'Mi-calendar front-end challenge',
+  description: 'antenada front-end challenge',
   locale: 'en'
 }

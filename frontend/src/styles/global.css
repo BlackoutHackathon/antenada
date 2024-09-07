@@ -6,7 +6,7 @@
 :root {
   /* UI & surface colors */
   --bg-logo: #355072;
-  --bg-nav-hover: rgba(7, 199, 224, 0.2);
+  --bg-nav-hover: rgba(242, 87, 159, 0.2);
   --bg-primary: #ffffff;
   --bg-secondary: #8c8c8c;
   --bg-tertiary: rgba(7, 199, 224, 0.2);
@@ -16,7 +16,7 @@
 
   --text-primary: #585858;
   --text-secondary: #242424;
-  --text-tertiary: #07c7e0;
+  --text-tertiary: #fc0a7a  ;
   --text-hover: #fff;
   --text-nav-title: #aeaeae;
   --text-create-event: #fff;
