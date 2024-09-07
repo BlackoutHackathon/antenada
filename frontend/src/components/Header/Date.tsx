@@ -1,7 +1,8 @@
 import moment from 'moment'
+import 'moment/locale/pt-br'
 
 export default function HeaderDate() {
-  const now = moment()
+  const now = moment().locale('pt-br')
 
   return (
     <span>

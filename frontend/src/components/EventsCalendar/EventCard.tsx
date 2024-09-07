@@ -1,4 +1,5 @@
 import moment from 'moment'
+import 'moment/locale/pt-br'
 
 import { EventForm } from '@/components/EventForm'
 import { useStateContext } from '@/context/StateContext'
@@ -7,9 +8,9 @@ import { Clock } from '@/Images'
 
 export const EventCard = (event: IEvents) => {
   const { setModal } = useStateContext()
-  const formatDate = moment(event.date).format('DD MMM, YYYY')
-  const formatStart = moment(event.startDate, 'HH:mm A').format('HH:mm A')
-  const formatEnd = moment(event.endDate, 'HH:mm A').format('HH:mm A')
+  const formatDate = moment(event.date).locale('pt-br').format('DD MMM, YYYY')
+  const formatStart = moment(event.startDate, 'HH:mm A').locale('pt-br').format('HH:mm A')
+  const formatEnd = moment(event.endDate, 'HH:mm A').locale('pt-br').format('HH:mm A')
 
   return (
     <article

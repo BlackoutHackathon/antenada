@@ -14,7 +14,7 @@ export const CalendarComponent = ({ getDate }: ICalendarComponent) => {
       value={date}
       className="flex w-full flex-col items-center rounded-lg border border-slate-300 p-4 text-xs"
       onClickDecade={undefined}
-      locale="en"
+      locale="pt-br"
       next2Label={null}
       prev2Label={null}
       prevLabel={<ArrowLeft />}

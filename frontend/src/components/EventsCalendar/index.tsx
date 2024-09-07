@@ -37,7 +37,7 @@ export const EventsCalendar = () => {
                 </StrictMode>
               ))
             ) : (
-              <p className="p-4">Nothing to show</p>
+              <p className="p-4">Nenhum evento</p>
             )}
           </div>
         </div>

@@ -2,5 +2,5 @@ export const AppConfig = {
   site_name: 'antenada',
   title: 'Calendar',
   description: 'antenada front-end challenge',
-  locale: 'en'
+  locale: 'pt-br'
 }

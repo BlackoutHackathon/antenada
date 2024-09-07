@@ -13,7 +13,7 @@ export const SearchForm = () => {
         <input
           type="search"
           className="block w-full rounded-lg bg-search p-4 pl-10 text-sm font-normal text-navTitle"
-          placeholder="Search task, event, calendar"
+          placeholder="Pesquisar"
           onChange={(event) => setSearch(event.currentTarget.value)}
         />
       </div>
