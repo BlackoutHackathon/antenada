@@ -14,7 +14,7 @@ export const EventsCalendar = () => {
   const { events } = useEventsContext()
 
   function getDate(date: Date | string) {
-    setCurrentDate(new Date(date))
+    setCurrentDate(new Date(date).toLocaleDateString('pt-br'))
   }
 
   useEffect(() => {

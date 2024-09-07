@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listen to Location, Audio, and Transcription</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map { height: 400px; width: 100%; }
+        #audioPlayer { margin-top: 20px; }
+        #transcription { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Listen to Location, Audio, and Transcription</h1>
+    <div id="map"></div>
+    <div id="audioPlayer"></div>
+    <div id="transcription"></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        const listenSocket = io('/listen');
+        let map, marker;
+
+        // Inicializa o mapa
+        function initMap() {
+            map = L.map('map').setView([0, 0], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+        }
+
+        initMap();
+
+        // Recebe atualizações de localização
+        listenSocket.on('location-update', (data) => {
+            const { latitude, longitude } = data;
+            if (marker) {
+                marker.setLatLng([latitude, longitude]);
+            } else {
+                marker = L.marker([latitude, longitude]).addTo(map);
+            }
+
+            map.setView([latitude, longitude], 13);
+        });
+
+        // Recebe atualizações de áudio
+        listenSocket.on('audio-update', (data) => {
+            const audioBlob = new Blob([data], { type: 'audio/wav' });
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const audio = new Audio(audioUrl);
+            audio.controls = true;
+            document.getElementById('audioPlayer').innerHTML = ''; // Limpa o player de áudio anterior
+            document.getElementById('audioPlayer').appendChild(audio);
+            audio.play();
+        });
+
+        // Recebe transcrição ao vivo
+        listenSocket.on('transcription-update', (transcript) => {
+            document.getElementById('transcription').innerText = transcript;
+        });
+    </script>
+</body>
+</html>

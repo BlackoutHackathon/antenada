@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Share Your Location and Audio</title>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <style>
+        #map { height: 400px; width: 100%; }
+        #controls { margin-top: 10px; }
+        #transcription { margin-top: 20px; }
+    </style>
+</head>
+<body>
+    <h1>Share Your Location and Audio</h1>
+    <div id="map"></div>
+    <div id="controls">
+        <button id="shareLocation">Share Location</button>
+        <button id="startAudio">Start Recording</button>
+        <button id="stopAudio">Stop Recording</button>
+    </div>
+    <div id="transcription"></div>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script>
+        const sendSocket = io('/send');
+        let map, marker;
+        let mediaRecorder;
+        let audioChunks = [];
+        let recognition;
+
+        // Inicializa o mapa
+        function initMap() {
+            map = L.map('map').setView([0, 0], 13);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+            }).addTo(map);
+        }
+
+        initMap();
+
+        // Compartilhamento de localização
+        document.getElementById('shareLocation').addEventListener('click', () => {
+            if (navigator.geolocation) {
+                navigator.geolocation.watchPosition(position => {
+                    const { latitude, longitude } = position.coords;
+                    sendSocket.emit('location', { latitude, longitude });
+
+                    if (marker) {
+                        marker.setLatLng([latitude, longitude]);
+                    } else {
+                        marker = L.marker([latitude, longitude]).addTo(map);
+                    }
+
+                    map.setView([latitude, longitude], 13);
+                }, error => {
+                    console.error('Error getting location:', error);
+                }, {
+                    enableHighAccuracy: true,
+                    timeout: 5000,
+                    maximumAge: 0
+                });
+            } else {
+                console.error('Geolocation is not supported by this browser.');
+            }
+        });
+
+        // Compartilhamento de áudio
+        document.getElementById('startAudio').addEventListener('click', async () => {
+            const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+            mediaRecorder = new MediaRecorder(stream);
+
+            mediaRecorder.ondataavailable = event => {
+                audioChunks.push(event.data);
+            };
+
+            mediaRecorder.onstop = () => {
+                const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
+                const reader = new FileReader();
+                reader.onload = () => {
+                    sendSocket.emit('audio', reader.result);
+                };
+                reader.readAsArrayBuffer(audioBlob);
+                audioChunks = [];
+            };
+
+            mediaRecorder.start();
+
+            // Inicializa o reconhecimento de voz
+            if ('webkitSpeechRecognition' in window) {
+                recognition = new webkitSpeechRecognition();
+                recognition.lang = 'pt-BR';
+                recognition.interimResults = true;
+                recognition.continuous = true;
+
+                recognition.onresult = event => {
+                    let transcript = '';
+                    for (let i = event.resultIndex; i < event.results.length; i++) {
+                        transcript += event.results[i][0].transcript;
+                    }
+                    sendSocket.emit('transcription', transcript);
+                    document.getElementById('transcription').innerText = transcript;
+                };
+
+                recognition.onerror = event => {
+                    console.error('Speech recognition error:', event.error);
+                };
+
+                recognition.start();
+            } else {
+                console.error('Speech recognition is not supported by this browser.');
+            }
+        });
+
+        document.getElementById('stopAudio').addEventListener('click', () => {
+            if (mediaRecorder) {
+                mediaRecorder.stop();
+            }
+            if (recognition) {
+                recognition.stop();
+            }
+        });
+    </script>
+</body>
+</html>
