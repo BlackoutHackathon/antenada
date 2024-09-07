@@ -4,7 +4,7 @@
 
 ## Funcionalidades
 
-- **Centralização de serviços**: Serviços de saúde, segurança, assistência jurídica e outros em um único lugar.
+- **Centralização de serviços**: Informações sobre serviços de saúde, segurança, assistência jurídica e outros em um único lugar.
 - **Geolocalização**: Identificação rápida de delegacias e serviços mais próximos com base na localização do usuário.
 - **Segurança acionada por voz**: Frase de emergência pré-cadastrada que aciona a polícia em caso de perigo.
 
