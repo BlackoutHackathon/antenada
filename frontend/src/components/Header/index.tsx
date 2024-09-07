@@ -4,6 +4,7 @@ import { Logo } from '@/components/Logo'
 import { CreateEventButton } from './CreateEventButton'
 import HeaderDate from './Date'
 import { ProfileButton } from './ProfileButton'
+import { AssistentVoiceButton } from './AssistentVoiceButton'
 import { SearchForm } from './SearchForm'
 
 export const Header = () => {
@@ -18,6 +19,7 @@ export const Header = () => {
         <div className="flex flex-wrap items-center justify-center gap-2 xl:justify-end">
           <CreateEventButton />
           <SearchForm />
+          <AssistentVoiceButton />
           <ProfileButton />
         </div>
       </nav>
