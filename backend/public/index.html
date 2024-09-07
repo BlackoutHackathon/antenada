@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web App de Agenda Controlado por Voz</title>
+    <link href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body class="has-background-light">
+
+    <section class="hero is-primary">
+        <div class="hero-body">
+            <div class="container has-text-centered">
+                <h1 class="title is-2">Agenda por Voz</h1>
+                <p class="subtitle">Gerencie seus compromissos com comandos de voz</p>
+            </div>
+        </div>
+    </section>
+
+    <div class="container">
+        <div class="section">
+            <div class="columns is-centered">
+                <div class="column is-half">
+                    <div class="box has-background-white-ter">
+                        <button id="start-recognition" class="button is-primary is-fullwidth is-large">
+                            Iniciar Reconhecimento de Voz
+                        </button>
+                    </div>
+                    <div id="results" class="mt-5">
+                        <!-- Resultados serão exibidos aqui -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuração do reconhecimento de voz
+        const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+        recognition.lang = 'pt-BR';
+        recognition.interimResults = false;
+        recognition.maxAlternatives = 1;
+
+        document.getElementById('start-recognition').addEventListener('click', () => {
+            recognition.start();
+        });
+
+        recognition.onresult = async (event) => {
+            const transcript = event.results[0][0].transcript;
+            console.log(`Transcrição: ${transcript}`);
+
+            // Enviar transcrição para o servidor
+            try {
+                const response = await fetch('http://localhost:3003/intent', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ text: transcript })
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Erro ao enviar comando: ${response.statusText}`);
+                }
+
+                const result = await response.json();
+                console.log('Resultado do servidor:', result);
+
+                // Exibir o resultado na tela
+                displayResults(result);
+            } catch (error) {
+                console.error('Erro ao processar a resposta do servidor:', error);
+                displayResults({ error: 'Erro ao processar o comando' });
+            }
+        };
+
+        recognition.onerror = (event) => {
+            console.error('Erro no reconhecimento de voz:', event.error);
+        };
+
+        function displayResults(result) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = ''; // Limpar resultados anteriores
+
+            // Exibir resultados
+            if (result.error) {
+                resultsDiv.innerHTML = `
+                    <div class="notification is-danger">
+                        <strong class="title">Erro:</strong>
+                        <p>${result.error}</p>
+                    </div>
+                `;
+                return;
+            }
+
+            if (result && Array.isArray(result)) {
+                if (result.length > 0) {
+                    result.forEach(item => {
+                        const resultItem = document.createElement('div');
+                        resultItem.className = 'box has-background-white-ter mb-4';
+                        resultItem.innerHTML = `
+                            <h3 class="title is-4">${item.title || 'Sem título'}</h3>
+                            <p><strong>Data e Hora:</strong> ${new Date(item.start).toLocaleString()}</p>
+                            <p><strong>Descrição:</strong> ${item.description || 'Sem descrição'}</p>
+                        `;
+                        resultsDiv.appendChild(resultItem);
+                    });
+                } else {
+                    resultsDiv.innerHTML = `
+                        <div class="notification is-info">
+                            <p>Nenhum resultado encontrado.</p>
+                        </div>
+                    `;
+                }
+            } else {
+                resultsDiv.innerHTML = `
+                    <div class="notification is-warning">
+                        <strong>Erro:</strong>
+                        <p>Erro inesperado ao processar o resultado.</p>
+                    </div>
+                `;
+            }
+        }
+    </script>
+</body>
+</html>

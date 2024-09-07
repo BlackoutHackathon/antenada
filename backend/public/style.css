@@ -1,0 +1,45 @@
+/* styles.css */
+
+/* Cores e Estilos Personalizados */
+.has-background-light {
+    background-color: #f9f9f9; /* Cor clara para o fundo */
+}
+
+.hero.is-primary {
+    background-color: #007bff; /* Azul claro para o cabeçalho */
+}
+
+.box {
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.button.is-primary {
+    background-color: #007bff; /* Azul claro para o botão */
+    border-color: #007bff;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.button.is-primary:hover {
+    background-color: #0056b3; /* Azul escuro no hover */
+    transform: scale(1.05);
+}
+
+.notification {
+    border-radius: 8px;
+}
+
+.notification.is-danger {
+    background-color: #f8d7da;
+    color: #721c24;
+}
+
+.notification.is-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+.notification.is-warning {
+    background-color: #fff3cd;
+    color: #856404;
+}
