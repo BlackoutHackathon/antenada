@@ -2,7 +2,7 @@ import { Asset } from '@/Images'
 
 export const controls = [
   { name: 'Agenda', href: '/', icon: Asset.Calendar },
-  { name: 'Mensagens', href: '/', icon: Asset.Message },
+  { name: 'Locais úteis', href: '/locaisUteis', icon: Asset.Message },
   { name: 'Relatorios', href: '/', icon: Asset.Diagram }
 ]
 

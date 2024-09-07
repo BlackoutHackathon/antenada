@@ -1,4 +1,3 @@
-import { useEventsContext } from '@/context/EventsContext'
 import { useEffect } from 'react'
 
 export const SpeechToText = () => {
@@ -11,7 +10,7 @@ useEffect(() => {
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
-    recognition.onresult = async (event) => {
+    recognition.onresult = async (event: any) => {
       const transcript = event.results[0][0].transcript;
       console.log(`Transcrição: ${transcript}`);
 
@@ -37,11 +36,11 @@ useEffect(() => {
       }
     };
 
-    recognition.onerror = (event) => {
+    recognition.onerror = (event: any) => {
       console.error("Erro no reconhecimento de voz:", event.error);
     };
 
-    function displayResults(result) {
+    function displayResults(result: any) {
       if (result.error) {
         // setResults([{ error: result.error }]);,ffdcxc
         return;
