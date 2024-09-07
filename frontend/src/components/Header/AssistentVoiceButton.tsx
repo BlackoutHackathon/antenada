@@ -6,7 +6,7 @@ export const AssistentVoiceButton = () => {
   const { setModal } = useStateContext()
   
   return (
-    <span className="ml-4 hidden flex-row gap-x-4 xl:flex">
+    <span className="ml-4 flex-row gap-x-4 xl:flex">
       <button 
         onClick={() => {
           setModal({

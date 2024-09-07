@@ -1,15 +1,12 @@
 import { useEventsContext } from '@/context/EventsContext'
-import { useStateContext } from '@/context/StateContext'
-import { IEvents } from '@/core/types'
-import { EventTypes } from '@/mocks/dataResouces'
 import { useEffect } from 'react'
 
 export const SpeechToText = () => {
-    const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    const recognition = new ((window as any).SpeechRecognition || (window as any).webkitSpeechRecognition)();
 //   const { updateEventStorage, removeEventStorage, saveEventStorage } =
 //     useEventsContext()
-  const { setModal } = useStateContext()
-  useEffect(() => {
+
+useEffect(() => {
     recognition.lang = "pt-BR";
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
@@ -64,7 +61,7 @@ export const SpeechToText = () => {
           onClick={() => {
             recognition.start();
           }}
-          className="create-btn"
+          className="group rounded-lg bg-button py-2 px-4 transition-colors hover:opacity-80 text-eventBtn"
         >
           Iniciar Reconhecimento de Voz
         </button>
