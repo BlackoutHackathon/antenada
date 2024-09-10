@@ -5,7 +5,11 @@ const path = require('path');
 
 const app = express();
 const server = http.createServer(app);
-const io = socketIO(server);
+const io = socketIO(server, {
+    cors: {
+        origin: "*"
+    }
+});
 
 // Serve arquivos estáticos
 app.use(express.static('public'));
